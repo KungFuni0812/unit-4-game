@@ -1,6 +1,26 @@
 body {
-    background-image: url("../images/background.jpg");
+    background: url("../images/background.jpg") no-repeat center center fixed; 
     background-color: skyblue;
-    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
 }
+
+h1 {
+    width: 500px;
+    margin-bottom: 0px;
+    height: 250px;
+}
+
+h2 {
+    margin-bottom: 15px;
+}
+
+.characters {
+    margin-bottom: 15px;
+}
+
+#attack-button-image {
+    height: 191px;
+} 
