@@ -136,6 +136,8 @@ $("#attack-button-image").on("click" ,  function(){
             // DONT DO THIS - THE INSTRUCTIONS DID NOT SAY TO RESET THE ATTACK POWER - reset yourCharacter.aTKP to baseATKP
             // yourCharacter.aTKP = yourCharacter.baseATKP;
             areYouFighting = false;
+            // hide the attack button again to indicate to the user that you are supposed to pick another opponent
+            $("#buttom-image").attr("hidden", true);
             // check to see if any opponents are left in the characterArray
             if (characterNames.length < 1) {
                 $("#results").text("You win!");
