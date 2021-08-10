@@ -24,3 +24,12 @@ h2 {
 #attack-button-image {
     height: 191px;
 } 
+
+p {
+    color: white;
+    text-align: center;
+}
+
+#results {
+    font-size: 48px;
+}

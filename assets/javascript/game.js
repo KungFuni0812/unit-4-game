@@ -1,42 +1,42 @@
 //load up the page, there are 4 characters - Done!
 var mario = {
-    name: "mario",
+    name: "Mario",
     hP: 120,
-    aTKP: 4,
-    baseATKP: 4,
-    counterATKP: 10,
+    aTKP: 8,
+    baseATKP: 8,
+    counterATKP: 8,
     image: "./assets/images/0.png"
 };
 
 var link = {
-    name: "link",
+    name: "Link",
     hP: 100,
-    aTKP: 6,
-    baseATKP: 6,
+    aTKP: 8,
+    baseATKP: 8,
     counterATKP: 8,
     image: "./assets/images/1.png"
 };
 
 var samus = {
-    name: "samus",
-    hP: 180,
+    name: "Samus",
+    hP: 140,
     aTKP: 5,
     baseATKP: 5,
-    counterATKP: 5,
+    counterATKP: 15,
     image: "./assets/images/2.png"
 };
 
 var fox = {
-    name: "fox",
-    hP: 150,
-    aTKP: 3,
-    baseATKP: 3,
-    counterATKP: 6,
+    name: "Fox",
+    hP: 110,
+    aTKP: 10,
+    baseATKP: 10,
+    counterATKP: 10,
     image: "./assets/images/3.png"
 };
 
 var characterArray = [mario, link, samus, fox];
-var characterNames = ["mario", "link", "samus", "fox"];
+var characterNames = ["Mario", "Link", "Samus", "Fox"];
 var attack;
 var didIChooseMyCharacterYet = false;
 var areYouFighting = false;
@@ -44,14 +44,27 @@ var gameOver = false;
 var yourCharacter = {};
 var opponent = {};
 
+// pre-load the music files on page load so they're ready to play immediately when triggered
+var fightMusic = new Audio("./assets/music/background.mp3");
+var failMusic = new Audio("./assets/music/fail.mp3");
+var winMusic;
+
 function addCharacterImage(object, id) {
     var fighterImg = $("<img>");
     fighterImg.addClass("img-fluid");
     fighterImg.attr("src", object.image);
-    $(id).append(fighterImg);
+    fighterImg.attr("id", "fighter"+object.name);
+    $(id).prepend(fighterImg);
 }
 
-$(".character-select").on("click" , function(){
+function hpUpdate(object, id) {
+    var fighterHP = object.hP;
+    $(id).attr("hidden", false);
+    $(id).text("HP: "+fighterHP);
+}
+
+
+$(document).on("click", ".character-select", function(){
     if (!areYouFighting && !gameOver) {
         if(didIChooseMyCharacterYet) {
             //choose a character you want to attack
@@ -61,7 +74,11 @@ $(".character-select").on("click" , function(){
             var index = characterNames.indexOf(opponent.name);
             characterNames.splice(index, 1);
             console.log(characterNames);
+            hpUpdate(opponent, "#opponentHp");
             addCharacterImage(opponent, "#cpu-fighter-image");
+            $(this).attr("src" ,  "assets/images/"+opponent.name+"Gray.png");
+            $(this).removeClass("character-select");
+            $("#buttom-image").attr("hidden", false);
             areYouFighting = true;
         } else {
             //select a character
@@ -74,7 +91,17 @@ $(".character-select").on("click" , function(){
             characterNames.splice(index, 1);
             console.log(characterNames);
             // generate the fighter image and append it to character area
+            hpUpdate(yourCharacter, "#yourHp");
             addCharacterImage(yourCharacter, "#your-fighter-image");
+            // change the src to the black and white version
+            $(this).attr("src" ,  "assets/images/"+yourCharacter.name+"Gray.png");
+            // take the character-select class off so the delegated click event does not fire on after the pic is black and white
+            $(this).removeClass("character-select");
+            // pre-load the win music for the selected character, just in case
+            winMusic = new Audio("./assets/music/"+yourCharacter.name+".mp3");
+            // start playing the main battle music after character is selected.  can't play audio on page load now (in a straightforward way) due to browser restrictions.
+            fightMusic.play();
+            // indicate to code that your character was selected, in order to handle click events properly
             didIChooseMyCharacterYet = true;
         }
     }
@@ -82,47 +109,40 @@ $(".character-select").on("click" , function(){
 
 $("#attack-button-image").on("click" ,  function(){
     if (areYouFighting && !gameOver) {
-        console.log("Pre-attack calculations:")
-        console.log("Opponent HP: " + opponent.hP)
-        console.log("Character HP: " + yourCharacter.hP)
-        console.log("-------------------------------")
-        console.log("Attack Calculations:")
         // your attack
         opponent.hP = opponent.hP - yourCharacter.aTKP;
-        console.log("Opponent HP after attack:" + opponent.hP)
+        hpUpdate(opponent, "#opponentHp")
         // counter attack
         yourCharacter.hP = yourCharacter.hP - opponent.counterATKP;
-        console.log("Your HP after counter attack: " + yourCharacter.hP)
+        hpUpdate(yourCharacter, "#yourHp")
         // increase attack power
         yourCharacter.aTKP = yourCharacter.aTKP + yourCharacter.baseATKP;
-        console.log("Your attack power has increased to " + yourCharacter.aTKP)
-        console.log("-------------------------------")
         // check if your hp is 0 or less
         // if your hp is less than or equal to 0, say you lose and stop the game
         if (yourCharacter.hP <= 0) {
-            alert("You lose!");
+            $("#results").text("You lose!");
+            fightMusic.pause();
+            failMusic.play();
             gameOver = true;
         }
         // check if opponent hp is 0 or less
-        if (opponent.hP <= 0) {
+        if (opponent.hP <= 0 && yourCharacter.hP > 0) {
+            // hide the HP until a new opponent is selected
+            $("#opponentHp").attr("hidden", true);
             // remove opponent image from cpu-fighter-image element
-            $("#cpu-fighter-image").empty()
+            $("#fighter"+opponent.name).remove()
             // clear the opponent variable
             opponent = {};
-            // reset yourCharacter.aTKP to baseATKP
-            yourCharacter.aTKP = yourCharacter.baseATKP;
+            // DONT DO THIS - THE INSTRUCTIONS DID NOT SAY TO RESET THE ATTACK POWER - reset yourCharacter.aTKP to baseATKP
+            // yourCharacter.aTKP = yourCharacter.baseATKP;
             areYouFighting = false;
             // check to see if any opponents are left in the characterArray
             if (characterNames.length < 1) {
-                alert("You win!");
+                $("#results").text("You win!");
+                fightMusic.pause();
+                winMusic.play()
                 gameOver = true;
             }
         }
     }
 })
-
-// display HPs on the page
-// update the HP values with each Attack button click
-// display how much damage you did, and how much counter attack damage was done to you with each attack button click
-// display a You Win and a You Lose screen/graphic/something or other
-// format HTML to look good.  characters standing on platform, character select in colored squares to stand out more (maybe margin between each - lookup bootstrap margin classes)

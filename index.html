@@ -23,36 +23,36 @@
         <!-- character select -->
         <div class="row justify-content-center characters">
             <div class="col-sm-2"> 
-                <img class="img-fluid character-select" src="assets/images/MarioCharacterSelect.png" alt="Mario" data-index="0">
+                <img class="img-fluid character-select" src="assets/images/MarioCharacterSelect.png"  id="Mario" data-index="0">
             </div>
             <div class="col-sm-2">
-                <img class="img-fluid character-select" src="assets/images/LinkCharacterSelect.png" alt="Link" data-index="1">
+                <img class="img-fluid character-select" src="assets/images/LinkCharacterSelect.png" id="Link" data-index="1">
             </div>
             <div class="col-sm-2">
-                <img class="img-fluid character-select" src="assets/images/SamusCharacterSelect.png" alt="Samus" data-index="2">
+                <img class="img-fluid character-select" src="assets/images/SamusCharacterSelect.png" id="Samus" data-index="2">
             </div>
             <div class="col-sm-2">
-                <img class="img-fluid character-select" src="assets/images/FoxCharacterSelect.png" alt="Fox" data-index="3">
+                <img class="img-fluid character-select" src="assets/images/FoxCharacterSelect.png" id="Fox" data-index="3">
             </div>
         </div>
 
         <!-- fighting area -->
         <div class="row">
             <div id="your-fighter-image" class = "col-md-3">
-                <!-- your fighter image -->
+                <!-- your fighter image --><p class="hp" id="yourHp"></p>
             </div>
             <div class = "col-md-2 "></div>
             <div id="attack-button-image" class = "col-md-2 justify-content-center d-flex">
-                <img class = "image-fluid" src = "assets/images/attack.PNG">
+                <img class = "image-fluid" id ="buttom-image" src = "assets/images/attack.PNG" hidden>
             </div>
             <div class = "col-md-2"></div>
             <div id="cpu-fighter-image" class = "col-md-3">
-                <!-- cpu fighter image -->
+                <!-- cpu fighter image --><p class="hp" id="opponentHp" hidden></p>
             </div>
         </div>
 
-        <div class = "row">
-            <!-- result display -->
+        <div class = "row justify-content-center">
+            <!-- result display --><p><b id="results"></b></p>
         </div>
         
 
