@@ -119,7 +119,7 @@ $("#attack-button-image").on("click" ,  function(){
         yourCharacter.aTKP = yourCharacter.aTKP + yourCharacter.baseATKP;
         // check if your hp is 0 or less
         // if your hp is less than or equal to 0, say you lose and stop the game
-        if (yourCharacter.hP <= 0) {
+        if (yourCharacter.hP < 0) {
             $("#results").text("You lose!");
             fightMusic.pause();
             failMusic.play();
