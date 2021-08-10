@@ -126,7 +126,7 @@ $("#attack-button-image").on("click" ,  function(){
             gameOver = true;
         }
         // check if opponent hp is 0 or less
-        if (opponent.hP <= 0 && yourCharacter.hP > 0) {
+        if (opponent.hP <= 0 && yourCharacter.hP >= 0) {
             // hide the HP until a new opponent is selected
             $("#opponentHp").attr("hidden", true);
             // remove opponent image from cpu-fighter-image element
